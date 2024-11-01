@@ -23,5 +23,3 @@ To use this bot:
 
 Remember to handle your Twitch credentials securely and not share them publicly. Also, make sure you comply with Twitch's terms of service and API usage guidelines when implementing and using this bot.
 ![crewai_diag](https://github.com/user-attachments/assets/70b8a20f-e676-445f-8a00-2c61a116d3e9)
-
-![diagram](https://github.com/user-attachments/assets/838570e2-e0ef-4cb8-8fc8-ccc58ce2bf9f)
