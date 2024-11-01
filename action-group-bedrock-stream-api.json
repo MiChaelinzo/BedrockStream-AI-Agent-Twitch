@@ -1,0 +1,414 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BedrockStream API",
+    "version": "1.0.0",
+    "description": "Comprehensive API for BedrockStream Twitch bot integration"
+  },
+  "servers": [
+    {
+      "url": "https://api.bedrockstream.com/v1"
+    }
+  ],
+  "paths": {
+    "/stream/manage": {
+      "post": {
+        "summary": "Manage stream settings",
+        "operationId": "manageStream",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StreamManageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamManageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/interact": {
+      "post": {
+        "summary": "Interact with chat",
+        "operationId": "chatInteract",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatInteractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatInteractResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/report": {
+      "get": {
+        "summary": "Get analytics report",
+        "operationId": "getAnalyticsReport",
+        "parameters": [
+          {
+            "name": "reportType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["viewership", "engagement", "growth", "comprehensive"]
+            }
+          },
+          {
+            "name": "timeFrame",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["daily", "weekly", "monthly", "custom"]
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai/generate": {
+      "post": {
+        "summary": "Generate AI response",
+        "operationId": "generateAIResponse",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIGenerateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIGenerateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StreamManageRequest": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["updateTitle", "updateGame", "setTags", "updateSchedule"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "game": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "schedule": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduleItem"
+            }
+          }
+        }
+      },
+      "StreamManageResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "updatedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChatInteractRequest": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["sendMessage", "timeout", "ban", "unban", "slowMode"]
+          },
+          "message": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatInteractResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "actionTaken": {
+            "type": "string"
+          }
+        }
+      },
+      "AnalyticsReport": {
+        "type": "object",
+        "properties": {
+          "reportType": {
+            "type": "string"
+          },
+          "timeFrame": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "trends": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrendItem"
+            }
+          },
+          "topContent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentItem"
+            }
+          }
+        }
+      },
+      "AIGenerateRequest": {
+        "type": "object",
+        "required": ["prompt", "context"],
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "recentMessages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "userInfo": {
+                "$ref": "#/components/schemas/UserInfo"
+              },
+              "streamInfo": {
+                "$ref": "#/components/schemas/StreamInfo"
+              }
+            }
+          },
+          "maxTokens": {
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          }
+        }
+      },
+      "AIGenerateResponse": {
+        "type": "object",
+        "properties": {
+          "generatedText": {
+            "type": "string"
+          },
+          "tokenCount": {
+            "type": "integer"
+          },
+          "sentiment": {
+            "type": "string",
+            "enum": ["positive", "neutral", "negative"]
+          }
+        }
+      },
+      "ScheduleItem": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "TrendItem": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ContentItem": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "views": {
+            "type": "integer"
+          },
+          "engagement": {
+            "type": "number"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "followDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "subscriptionTier": {
+            "type": "string"
+          },
+          "messageCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "StreamInfo": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "game": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "viewerCount": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
